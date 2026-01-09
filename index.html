@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bordplassering | Grønn Jobb Galla</title>
+    <style>
+        /* --- BRANDING & VARIABLER --- */
+        :root {
+            --primary: #0a3024;       /* Mørk grønn */
+            --primary-light: #154535; /* Litt lysere for hover */
+            --secondary: #027b5f;     /* Klar grønn */
+            --bg-light: #e8f6f4;      /* Bakgrunn */
+            --white: #ffffff;
+            --text-dark: #1a1a1a;
+            --text-muted: #666666;
+            --accent: #d4af37;        /* Gull */
+            --radius: 16px;
+            --shadow: 0 10px 30px -10px rgba(10, 48, 36, 0.15);
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            padding-bottom: 80px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 30px 20px 20px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            margin-bottom: -20px; /* Trekker søkefeltet litt opp */
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            height: 45px;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            
+            /* Gjør logoen hvit så den synes på mørk bakgrunn */
+            filter: brightness(0) invert(1); 
+            opacity: 0.9;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            color: #d1e8e2;
+            margin-bottom: 20px;
+        }
+
+        /* --- SØK --- */
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 16px 24px;
+            border-radius: 50px;
+            border: none;
+            font-size: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            box-shadow: 0 4px 25px rgba(2, 123, 95, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* --- GRID CONTAINER --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding: 0 15px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        /* Responsiv grid: 2 kolonner på tablet, 3 på desktop */
+        @media (min-width: 768px) { .container { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1100px) { .container { grid-template-columns: repeat(3, 1fr); } }
+
+        /* --- BORDKORT --- */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: transform 0.3s ease, opacity 0.3s;
+        }
+
+        .card-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+            background-color: #fafdfc;
+        }
+
+        .card-title {
+            color: var(--primary);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .card-meta {
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* --- SEKSJON 1: VISUELL SIRKEL (Table Top) --- */
+        .visual-area {
+            position: relative;
+            width: 100%;
+            padding: 30px 0;
+            display: flex;
+            justify-content: center;
+            background: radial-gradient(circle at center, #fff 0%, #f7fffd 70%);
+        }
+
+        .table-circle {
+            width: 180px;
+            height: 180px;
+            position: relative;
+            border-radius: 50%;
+            background-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(10, 48, 36, 0.25);
+            border: 6px solid #eefef9;
+            /* Gullring rundt */
+            outline: 1px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 2rem;
+            font-weight: 700;
+            z-index: 1;
+        }
+
+        /* Stoler (prikker med tall) */
+        .seat-dot {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background-color: var(--white);
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--primary);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            transition: transform 0.2s, background-color 0.2s;
+            z-index: 10;
+        }
+
+        /* --- SEKSJON 2: GJESTELISTE (List View) --- */
+        .guest-list {
+            padding: 20px;
+            background-color: var(--white);
+            /* Grid layout for navnene */
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* To kolonner */
+            gap: 12px 15px;
+        }
+
+        .guest-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            padding: 6px;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+            cursor: pointer; /* Hint om interaksjon */
+        }
+        
+        /* Når man trykker på et navn på mobil */
+        .guest-item:active {
+            background-color: #f0f9f6;
+        }
+
+        .guest-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background-color: var(--bg-light);
+            color: var(--secondary);
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 700;
+            margin-right: 10px;
+            flex-shrink: 0;
+            border: 1px solid rgba(2, 123, 95, 0.2);
+        }
+
+        .guest-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* --- STATES & HIGHLIGHTS --- */
+        
+        /* Highlight state (fra søk) */
+        .card.dimmed {
+            opacity: 0.4;
+            transform: scale(0.98);
+        }
+
+        .guest-item.highlight {
+            background-color: var(--primary);
+        }
+        .guest-item.highlight .guest-name { color: var(--white); }
+        .guest-item.highlight .guest-number { background-color: var(--accent); color: var(--primary); border-color: var(--accent); }
+
+        .seat-dot.highlight {
+            background-color: var(--accent);
+            border-color: var(--primary);
+            transform: scale(1.3);
+            z-index: 20;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        }
+
+        .seat-dot.empty {
+            background-color: #f0f0f0;
+            border-color: #ddd;
+            color: #ccc;
+        }
+
+        .empty-text {
+            color: #bbb;
+            font-style: italic;
+            font-weight: 400;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://www.gronnjobb.no/hubfs/Imported%20images/logo-02.svg" alt="Grønn Jobb" class="logo">
+        <h1>Galla Bordplassering</h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-box" id="searchInput" placeholder="Søk etter ditt navn...">
+        </div>
+    </header>
+
+    <div class="container" id="app">
+        </div>
+
+    <script>
+        // --- DATA FRA BILDET ---
+        // Liste over gjester per bord (Bord 1 til 9)
+        const tablesData = [
+            // Bord 1
+            ["Martin", "Mathias", "Mattis", "Patrick J", "Rene", "Christine", "Jeanett", "Linn", "Malin"],
+            // Bord 2
+            ["Gøril", "Hanne", "Frederic", "Håvar", "Andrea", "Anette", "Marthe", "Tommy", "TB"],
+            // Bord 3
+            ["Patrick H", "Madelen", "Camilla A", "Rasmus", "Steffen", "Terje L", "Stig Owe", "Therese G", "Josefine"],
+            // Bord 4
+            ["Lotte", "Marielle", "Tina", "Line", "Silje O", "Ørjan", "Per", "Adam", "Tonje"],
+            // Bord 5
+            ["Mathias", "Simon", "Silje S", "Miriam", "Idris", "Tobias", "Mats", "Marius", "Terje K"],
+            // Bord 6
+            ["Katrine He", "Camilla L", "Sonja", "Dina", "Gine", "Eli", "Oddbjørn", "Willy", "Christer M"],
+            // Bord 7
+            ["Therese D", "Marte", "Katrine Ha", "Anki", "Aslaug", "Ingrid Lene", "Lars", "Christer J", "Mentor"],
+            // Bord 8
+            ["Nina", "Linda A", "Anita A", "Christian", "Linda H", "Cecilie", "Andrine", "Therese H", "Rita"],
+            // Bord 9 (Dette har 10 gjester)
+            ["Mona", "Albina", "Julie", "Dan Mario", "Pezhman", "Joachim", "Hemmelig", "Petter", "Preben", "Peter"]
+        ];
+
+        // Konfigurasjon
+        const tables = [];
+
+        // Generer datastruktur for appen
+        tablesData.forEach((guestNames, index) => {
+            const tableId = index + 1;
+            const capacity = 10; // Vi bruker 10 seter som standard for fin geometri
+            
+            // Lag kopi av navnelisten
+            let guests = [...guestNames];
+            
+            // Fyll opp med null for tomme seter (slik at geometrien stemmer)
+            while(guests.length < capacity) {
+                guests.push(null);
+            }
+
+            tables.push({
+                id: tableId,
+                name: "Bord " + tableId,
+                guests: guests,
+                capacity: capacity
+            });
+        });
+
+        // --- RENDER LOGIC ---
+        const app = document.getElementById('app');
+
+        function render() {
+            app.innerHTML = '';
+
+            tables.forEach(table => {
+                // 1. Lag hovedkortet
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.id = `card-${table.id}`;
+
+                // 2. Header
+                const filledSeats = table.guests.filter(g => g !== null).length;
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-title">${table.name}</div>
+                        <div class="card-meta">${filledSeats} gjester</div>
+                    </div>
+                `;
+
+                // 3. Den Visuelle Seksjonen (Sirkelen)
+                const visualArea = document.createElement('div');
+                visualArea.className = 'visual-area';
+                
+                const tableCircle = document.createElement('div');
+                tableCircle.className = 'table-circle';
+                tableCircle.innerText = table.id; // Bordnummer i midten
+
+                // Plasser seter (kun prikker med tall)
+                table.guests.forEach((guest, index) => {
+                    const seatNum = index + 1;
+                    const angle = (index * (360 / table.capacity)) - 90; // -90 for å starte kl 12
+                    const angleRad = angle * (Math.PI / 180);
+                    
+                    // Avstand fra sentrum
+                    const distance = 110; // px
+
+                    const dot = document.createElement('div');
+                    dot.className = 'seat-dot';
+                    if(!guest) dot.classList.add('empty');
+                    dot.innerText = seatNum;
+                    dot.dataset.seatIndex = index; 
+                    
+                    const x = Math.cos(angleRad) * distance;
+                    const y = Math.sin(angleRad) * distance;
+                    
+                    dot.style.transform = `translate(${x}px, ${y}px)`;
+                    
+                    tableCircle.appendChild(dot);
+                });
+
+                visualArea.appendChild(tableCircle);
+                card.appendChild(visualArea);
+
+                // 4. Gjestelisten
+                const listArea = document.createElement('div');
+                listArea.className = 'guest-list';
+
+                table.guests.forEach((guest, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'guest-item';
+                    item.dataset.seatIndex = index;
+                    
+                    // Hvis det er en gjest
+                    if (guest) {
+                        item.dataset.name = guest.toLowerCase();
+                        item.innerHTML = `
+                            <div class="guest-number">${index + 1}</div>
+                            <div class="guest-name">${guest}</div>
+                        `;
+                    } else {
+                        // Tomt sete
+                        item.classList.add('empty-seat');
+                        item.innerHTML = `
+                            <div class="guest-number" style="opacity:0.3">${index + 1}</div>
+                            <div class="guest-name empty-text">Ledig</div>
+                        `;
+                    }
+
+                    // Interaksjon: Trykk på navn i listen -> highlight dot
+                    item.addEventListener('click', () => {
+                        if(!guest) return;
+                        // Fjern andre highlights internt i kortet
+                        card.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
+                        
+                        // Highlight seg selv
+                        item.classList.add('highlight');
+                        // Finn riktig dot og highlight den
+                        const matchingDot = tableCircle.querySelector(`.seat-dot[data-seat-index="${index}"]`);
+                        if(matchingDot) matchingDot.classList.add('highlight');
+                    });
+
+                    listArea.appendChild(item);
+                });
+
+                card.appendChild(listArea);
+                app.appendChild(card);
+            });
+        }
+
+        // --- SØKEFUNKSJON ---
+        const searchInput = document.getElementById('searchInput');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.card');
+            
+            // Nullstill alt
+            document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
+            cards.forEach(c => c.classList.remove('dimmed'));
+
+            if (term.length === 0) return;
+
+            let hasMatch = false;
+
+            // Loop gjennom alle navnelinjer
+            document.querySelectorAll('.guest-item').forEach(item => {
+                const name = item.dataset.name;
+                if (name && name.includes(term)) {
+                    hasMatch = true;
+                    
+                    // 1. Highlight raden i listen
+                    item.classList.add('highlight');
+                    
+                    // 2. Highlight prikken på bordet
+                    const card = item.closest('.card');
+                    const index = item.dataset.seatIndex;
+                    const dot = card.querySelector(`.seat-dot[data-seat-index="${index}"]`);
+                    if(dot) dot.classList.add('highlight');
+
+                    // 3. Merk kortet som aktivt
+                    card.dataset.hasMatch = "true";
+                }
+            });
+
+            // Dimme kort som ikke har treff
+            if (hasMatch) {
+                cards.forEach(card => {
+                    if (card.dataset.hasMatch === "true") {
+                        card.removeAttribute('data-hasMatch'); 
+                    } else {
+                        card.classList.add('dimmed');
+                    }
+                });
+
+                // Scroll til første treff
+                const firstHighlight = document.querySelector('.guest-item.highlight');
+                if(firstHighlight) {
+                    firstHighlight.closest('.card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+
+        // Init
+        render();
+
+    </script>
+</body>
+</html>
