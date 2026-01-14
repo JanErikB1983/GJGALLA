@@ -295,7 +295,7 @@ const tablesData = [
         const tables = [];
         tablesData.forEach((guestNames, index) => {
             const tableId = index + 1;
-            const capacity = 10; 
+            const capacity = 9; 
             let guests = [...guestNames];
             while(guests.length < capacity) { guests.push(null); }
             tables.push({ id: tableId, name: "Bord " + tableId, guests: guests, capacity: capacity });
