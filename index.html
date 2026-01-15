@@ -263,34 +263,33 @@
     <script>
         // --- DATA (Lest loddrett fra Excel-listen din) ---
 const tablesData = [
-            // Bord 1
-            ["Mattis", "Mathias", "Martin", "Patrick J", "Rene", "Christine", "Linn", "Jeanett"],
-            
-            // Bord 2
-            ["Andrine", "Rita", "Therese D", "Therese H", "Peter", "Nina", "Linda A", "Linda H", "Cecilie"],
-            
-            // Bord 3
-            ["Hanne", "Gøril", "Frederic", "Håvar", "Christian", "Tommy", "Marte", "Andrea", "Anette"],
-            
-            // Bord 4
-            ["Julie", "Dan Mario", "Pezhman", "Joachim", "Hemmelig", "Petter", "Mona", "Preben", "Albina"],
-            
-            // Bord 5
-            ["Oddbjørn", "Christer M", "Willy", "Katrine NH", "Camilla L", "Sonja", "Dina", "Gine", "Eli Sofie"],
-            
-            // Bord 6
-            ["Mathias", "Idris", "Tobias", "Mats", "Marius", "Terje K", "Silje S", "Miriam", "Simon"],
-            
-            // Bord 7
-            ["Patrick H", "Madelen", "Camilla A", "Rasmus", "Steffen", "Stig Owe", "Tonje", "Josefine", "Therese G"],
-            
-            // Bord 8
-            ["Adam", "Per", "Katrine H", "Lotte", "Tina", "Marielle", "Line", "Silje O", "Ørjan"],
-            
-            // Bord 9
-            ["Lars", "Mentor", "Dalida", "Christer J", "Tore Bjørn", "Terje L", "Ingrid Lene", "Ann Kristin", "Aslaug"]
-        ];
-
+    // Bord 1 (Uendret)
+    ["Mattis", "Mathias", "Martin", "Patrick J", "Rene", "Christine", "Linn", "Jeanett"],
+    
+    // Bord 2 (Oppdatert: Mentor og Lars flyttet hit, rekkefølge endret)
+    ["Mentor", "Andrine", "Linda H", "Rita", "Peter", "Nina", "Linda A", "Lars"],
+    
+    // Bord 3 (Uendret)
+    ["Hanne", "Gøril", "Frederic", "Håvar", "Christian", "Tommy", "Marte", "Andrea", "Anette"],
+    
+    // Bord 4 (Uendret)
+    ["Julie", "Dan Mario", "Pezhman", "Joachim", "Hemmelig", "Petter", "Mona", "Preben", "Albina"],
+    
+    // Bord 5 (Uendret)
+    ["Oddbjørn", "Christer M", "Willy", "Katrine NH", "Camilla L", "Sonja", "Dina", "Gine", "Eli Sofie"],
+    
+    // Bord 6 (Uendret)
+    ["Mathias", "Idris", "Tobias", "Mats", "Marius", "Terje K", "Silje S", "Miriam", "Simon"],
+    
+    // Bord 7 (Oppdatert: Fjernet Therese G som ikke var i bildet)
+    ["Patrick H", "Madelen", "Camilla A", "Rasmus", "Steffen", "Stig Owe", "Tonje", "Josefine"],
+    
+    // Bord 8 (Uendret)
+    ["Adam", "Per", "Katrine H", "Lotte", "Tina", "Marielle", "Line", "Silje O", "Ørjan"],
+    
+    // Bord 9 (Oppdatert: Therese H og D flyttet hit, Lars og Mentor flyttet ut)
+    ["Therese H", "Therese D", "Christer J", "Dalida", "Tore Bjørn", "Terje L", "Ingrid Lene", "Ann Kristin", "Aslaug"]
+];
         // Bygg data-struktur
         const tables = [];
         tablesData.forEach((guestNames, index) => {
