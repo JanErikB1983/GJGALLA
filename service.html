@@ -233,34 +233,50 @@
 
     <script>
         // --- DATA ---
-        const allergyMap = {
-            "albina": "Svin",
-            "ann kristin": "Sopp",
-            "christer j": "Skalldyr",
-            "joachim": "Løk, nøtter, frø, melk, meieri, egg, korn, gluten",
-            "josefine": "Svin",
-            "lotte": "Skalldyr og fisk",
-            "malin": "Lam og fårekjøtt",
-            "mentor": "Skalldyr og svin",
-            "preben": "Gluten, skalldyr, hvit fisk, nøtter",
-            "silje s": "Kiwi, paprika",
-            "terje k": "Fersk pepperrot",
-            "therese g": "Gluten/cøliaki, hvete, rug, bygg, havre",
-            "tonje": "Laktose- og glutenintoleranse",
-            "tore bjørn": "Gluten"
-        };
+const allergyMap = {
+    "albina": "Svin",
+    "katrine nh": "Hvitløk",
+    "ann kristin": "Sopp",
+    "christer j": "Skalldyr",
+    "joachim": "Løk, nøtter, frø, melk, meieri, egg, korn, gluten",
+    "josefine": "Svin",
+    "lotte": "Skalldyr og fisk",
+    "mentor": "Skalldyr og svin",
+    "preben": "Gluten, skalldyr, hvit fisk, nøtter",
+    "silje s": "Kiwi, paprika",
+    "terje k": "Fersk pepperrot",
+    "tonje": "Laktose- og glutenintoleranse",
+    "tore bjørn": "Gluten"
+};
 
-        const tablesData = [
-            ["Mattis", "Mathias", "Martin", "Patrick J", "Rene", "Christine", "Linn", "Malin", "Jeanett"],
-            ["Nina", "Linda A", "Linda H", "Cecilie", "Andrine", "Therese H", "Rita", "Peter", "Tore Bjørn"],
-            ["Hanne", "Gøril", "Frederic", "Håvar", "Christian", "Tommy", "Marthe", "Andrea", "Anette"],
-            ["Mona", "Preben", "Albina", "Julie", "Dan Mario", "Pezhman", "Joachim", "Hemmelig", "Petter"],
-            ["Katrine NH", "Camilla L", "Sonja", "Dina", "Gine", "Eli Sofie", "Oddbjørn", "Christer M", "Willy"],
-            ["Mathias", "Simon", "Silje S", "Miriam", "Idris", "Tobias", "Mats", "Marius", "Terje K"],
-            ["Patrick H", "Madelen", "Camilla A", "Rasmus", "Steffen", "Stig Owe", "Ingrid Lene", "Therese G", "Josefine"],
-            ["Lotte", "Tina", "Marielle", "Line", "Silje O", "Ørjan", "Adam", "Per", "Tonje"],
-            ["Therese D", "Marte", "Katrine H", "Ann Kristin", "Aslaug", "Terje L", "Lars", "Christer J","Dalida", "Mentor"]
-        ];
+const tablesData = [
+    // Bord 1
+    ["Mattis", "Mathias", "Martin", "Patrick J", "Rene", "Christine", "Linn", "Jeanett"],
+    
+    // Bord 2
+    ["Mentor", "Andrine", "Linda H", "Rita", "Peter", "Nina", "Linda A", "Lars"],
+    
+    // Bord 3
+    ["Hanne", "Gøril", "Frederic", "Håvar", "Christian", "Tommy", "Marte", "Andrea", "Anette"],
+    
+    // Bord 4
+    ["Julie", "Dan Mario", "Pezhman", "Joachim", "Hemmelig", "Petter", "Mona", "Preben", "Albina"],
+    
+    // Bord 5
+    ["Oddbjørn", "Christer M", "Willy", "Katrine NH", "Camilla L", "Sonja", "Dina", "Gine", "Eli Sofie"],
+    
+    // Bord 6
+    ["Mathias", "Idris", "Tobias", "Mats", "Marius", "Terje K", "Silje S", "Miriam", "Simon"],
+    
+    // Bord 7
+    ["Patrick H", "Madelen", "Camilla A", "Rasmus", "Steffen", "Stig Owe", "Tonje", "Josefine"],
+    
+    // Bord 8
+    ["Adam", "Per", "Katrine H", "Lotte", "Tina", "Marielle", "Line", "Silje O", "Ørjan"],
+    
+    // Bord 9
+    ["Therese H", "Therese D", "Christer J", "Dalida", "Tore Bjørn", "Terje L", "Ingrid Lene", "Ann Kristin", "Aslaug"]
+];
 
         // Process Data
         let totalAllergies = 0;
