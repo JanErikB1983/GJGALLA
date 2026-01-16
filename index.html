@@ -3,395 +3,446 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Service Dashboard | Galla</title>
+    <title>Bordplassering | Grønn Jobb Galla</title>
     <style>
+        /* --- BRANDING & VARIABLER --- */
         :root {
-            --bg-dark: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #e0e0e0;
-            --text-muted: #888;
-            --accent: #d4af37; /* Gull */
-            --alert: #ff5252; /* Rød for viktig info */
-            --warning: #ffb74d; /* Oransje */
-            --border-radius: 12px;
+            --primary: #0a3024;       
+            --secondary: #027b5f;     
+            --bg-light: #e8f6f4;      
+            --white: #ffffff;
+            --text-dark: #1a1a1a;
+            --accent: #d4af37;        
+            --radius: 16px;
+            --shadow: 0 10px 30px -10px rgba(10, 48, 36, 0.15);
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            padding-bottom: 60px;
+            font-family: var(--font-main);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            padding-bottom: 80px;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- CONTROL BAR (STICKY) --- */
-        .control-bar {
-            position: sticky;
-            top: 0;
-            background-color: rgba(18, 18, 18, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px;
-            z-index: 100;
-            border-bottom: 1px solid #333;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        h1 { font-size: 1.2rem; font-weight: 700; color: var(--accent); margin: 0; }
-        .stats { font-size: 0.8rem; color: var(--text-muted); }
-
-        /* TOGGLE SWITCH */
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            background: #2c2c2c;
-            padding: 4px;
-            border-radius: 50px;
-            position: relative;
-            cursor: pointer;
-            width: 100%;
-            height: 44px;
-        }
-
-        .toggle-btn {
-            flex: 1;
+        /* --- HEADER --- */
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 30px 20px 20px;
             text-align: center;
-            padding: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            z-index: 2;
-            transition: color 0.3s;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            margin-bottom: -20px;
+            position: sticky; 
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
-        .toggle-bg {
-            position: absolute;
-            left: 4px;
-            top: 4px;
-            bottom: 4px;
-            width: calc(50% - 4px);
-            background: var(--accent);
-            border-radius: 50px;
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 1;
+        .logo {
+            height: 45px;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            filter: brightness(0) invert(1); 
+            opacity: 0.9;
         }
 
-        /* State classes for toggle */
-        body[data-mode="all"] .toggle-bg { transform: translateX(0); }
-        body[data-mode="allergy"] .toggle-bg { transform: translateX(100%); background-color: var(--alert); }
-        
-        body[data-mode="all"] .btn-all { color: #000; }
-        body[data-mode="allergy"] .btn-allergy { color: #fff; }
-
-        /* --- SEARCH --- */
-        .search-wrapper {
-            margin: 10px 15px;
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            color: #d1e8e2;
+            margin-bottom: 20px;
+            display: none; 
         }
-        .search-input {
+        @media (min-width: 768px) { h1 { display: block; } }
+
+        /* --- SØK --- */
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box {
             width: 100%;
-            background: #2c2c2c;
-            border: 1px solid #444;
-            padding: 12px 15px;
-            border-radius: 8px;
-            color: white;
-            font-size: 16px;
-        }
-        .search-input:focus { outline: none; border-color: var(--accent); }
-
-        /* --- GRID --- */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-            padding: 15px;
-        }
-
-        /* --- CARD --- */
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            border: 1px solid #333;
-            overflow: hidden;
+            padding: 16px 24px;
+            border-radius: 50px;
+            border: none;
+            font-size: 16px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            outline: none;
             transition: all 0.3s ease;
         }
 
-        .card-header {
-            padding: 12px 15px;
-            background: #252525;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
+        .search-box:focus {
+            box-shadow: 0 4px 25px rgba(2, 123, 95, 0.3);
+            transform: translateY(-2px);
         }
 
-        .table-title { font-weight: 700; font-size: 1.1rem; }
-        .table-meta { font-size: 0.8rem; color: var(--text-muted); }
-        
-        .alert-badge {
-            background: rgba(255, 82, 82, 0.15);
-            color: var(--alert);
-            border: 1px solid var(--alert);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            display: none; /* Shows via JS */
+        /* --- GRID CONTAINER --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding: 0 15px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
         }
 
-        /* --- LIST ITEMS --- */
-        .seat-list {
+        @media (min-width: 768px) { .container { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1100px) { .container { grid-template-columns: repeat(3, 1fr); } }
+
+        /* --- BORDKORT --- */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: transform 0.3s ease, opacity 0.3s;
+            
+            /* VIKTIG ENDRING: Buffer for sticky header. 
+               160px sørger for at kortet stopper under søkefeltet. */
+            scroll-margin-top: 160px; 
         }
 
-        .seat-item {
+        .card-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+            background-color: #fafdfc;
+        }
+
+        .card-title {
+            color: var(--primary);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .card-meta {
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* --- VISUELL SIRKEL --- */
+        .visual-area {
+            position: relative;
+            width: 100%;
+            padding: 30px 0;
             display: flex;
-            align-items: flex-start; /* Align top for multi-line allergies */
-            padding: 12px 15px;
-            border-bottom: 1px solid #2a2a2a;
-            font-size: 0.95rem;
+            justify-content: center;
+            background: radial-gradient(circle at center, #fff 0%, #f7fffd 70%);
         }
-        .seat-item:last-child { border-bottom: none; }
 
-        .seat-num {
-            width: 28px;
-            height: 28px;
-            background: #333;
+        .table-circle {
+            width: 180px;
+            height: 180px;
+            position: relative;
+            border-radius: 50%;
+            background-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(10, 48, 36, 0.25);
+            border: 6px solid #eefef9;
+            outline: 1px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 2rem;
+            font-weight: 700;
+            z-index: 1;
+        }
+
+        .seat-dot {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background-color: var(--white);
+            border: 2px solid var(--secondary);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--primary);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            transition: transform 0.2s, background-color 0.2s;
+            z-index: 10;
+        }
+
+        /* --- GJESTELISTE --- */
+        .guest-list {
+            padding: 20px;
+            background-color: var(--white);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 15px;
+        }
+
+        .guest-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            padding: 6px;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+        
+        .guest-item:active { background-color: #f0f9f6; }
+
+        .guest-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background-color: var(--bg-light);
+            color: var(--secondary);
+            border-radius: 50%;
+            font-size: 11px;
             font-weight: 700;
-            margin-right: 12px;
+            margin-right: 10px;
             flex-shrink: 0;
-            color: #aaa;
+            border: 1px solid rgba(2, 123, 95, 0.2);
         }
 
-        .seat-content { flex: 1; }
-        
-        .seat-name { display: block; font-weight: 500; }
-        
-        .allergy-tag {
-            display: inline-block;
-            margin-top: 4px;
-            font-size: 0.85rem;
-            color: var(--alert);
-            font-weight: 600;
-            background: rgba(255, 82, 82, 0.1);
-            padding: 4px 8px;
-            border-radius: 4px;
+        .guest-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-dark);
+            font-weight: 500;
         }
 
-        /* --- MODES --- */
-        /* Hiding mechanics for "Show Only Allergies" mode */
-        body[data-mode="allergy"] .seat-item:not(.has-allergy) {
-            display: none;
-        }
+        /* --- STATES --- */
+        .card.dimmed { opacity: 0.4; transform: scale(0.98); }
         
-        body[data-mode="allergy"] .card:not(.has-allergy-content) {
-            opacity: 0.3; /* Dim tables with no allergies */
-            pointer-events: none;
+        .guest-item.highlight { background-color: var(--primary); }
+        .guest-item.highlight .guest-name { color: var(--white); }
+        .guest-item.highlight .guest-number { background-color: var(--accent); color: var(--primary); border-color: var(--accent); }
+
+        .seat-dot.highlight {
+            background-color: var(--accent);
+            border-color: var(--primary);
+            transform: scale(1.3);
+            z-index: 20;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
         }
 
-        /* Highlight styles */
-        .highlight {
-            background-color: rgba(212, 175, 55, 0.2);
-            border-left: 3px solid var(--accent);
-        }
+        /* SKJULER TOMME PLASSER HELT */
+        .seat-dot.empty { display: none; }
+        .guest-item.empty-seat { display: none; }
 
     </style>
 </head>
-<body data-mode="all">
+<body>
 
-    <div class="control-bar">
-        <div class="header-row">
-            <div>
-                <h1>Kjøkkenoversikt</h1>
-                <div class="stats" id="totalStats">Laster data...</div>
-            </div>
-            <img src="https://www.gronnjobb.no/hubfs/Imported%20images/logo-02.svg" style="height:24px; filter:invert(1); opacity:0.7;">
-        </div>
-
-        <div class="toggle-container" onclick="toggleMode()">
-            <div class="toggle-bg"></div>
-            <div class="toggle-btn btn-all">Alle Gjester</div>
-            <div class="toggle-btn btn-allergy">Kun Allergier</div>
-        </div>
+    <header>
+        <img src="https://www.gronnjobb.no/hubfs/Imported%20images/logo-02.svg" alt="Grønn Jobb" class="logo">
+        <h1>Bordplassering galla</h1>
         
-        <input type="text" class="search-input" id="searchInput" placeholder="Søk navn eller allergi...">
-    </div>
+        <div class="search-container">
+            <input type="text" class="search-box" id="searchInput" placeholder="Søk etter ditt navn...">
+        </div>
+    </header>
 
-    <div class="grid" id="app"></div>
+    <div class="container" id="app"></div>
 
     <script>
-        // --- DATA ---
-const allergyMap = {
-    "albina": "Svin",
-    "katrine nh": "Hvitløk",
-    "ann kristin": "Sopp",
-    "christer j": "Skalldyr",
-    "joachim": "Løk, nøtter, frø, melk, meieri, egg, korn, gluten",
-    "josefine": "Svin",
-    "lotte": "Skalldyr og fisk",
-    "mentor": "Skalldyr og svin",
-    "preben": "Gluten, skalldyr, hvit fisk, nøtter",
-    "silje s": "Kiwi, paprika",
-    "terje k": "Fersk pepperrot",
-    "tonje": "Laktose- og glutenintoleranse",
-    "tore bjørn": "Gluten"
-};
-
+        // --- DATA (Lest loddrett fra Excel-listen din) ---
 const tablesData = [
-    // Bord 1
+    // Bord 1 (Uendret)
     ["Mattis", "Mathias", "Martin", "Patrick J", "Rene", "Christine", "Linn", "Jeanett"],
     
-    // Bord 2
+    // Bord 2 (Oppdatert: Mentor og Lars flyttet hit, rekkefølge endret)
     ["Mentor", "Andrine", "Linda H", "Rita", "Peter", "Nina", "Linda A", "Lars"],
     
-    // Bord 3
+    // Bord 3 (Uendret)
     ["Hanne", "Gøril", "Frederic", "Håvar", "Christian", "Tommy", "Marte", "Andrea", "Anette"],
     
-    // Bord 4
+    // Bord 4 (Uendret)
     ["Julie", "Dan Mario", "Pezhman", "Joachim", "Hemmelig", "Petter", "Mona", "Preben", "Albina"],
     
-    // Bord 5
+    // Bord 5 (Uendret)
     ["Oddbjørn", "Christer M", "Willy", "Katrine NH", "Camilla L", "Sonja", "Dina", "Gine", "Eli Sofie"],
     
-    // Bord 6
+    // Bord 6 (Uendret)
     ["Mathias", "Idris", "Tobias", "Mats", "Marius", "Terje K", "Silje S", "Miriam", "Simon"],
     
-    // Bord 7
+    // Bord 7 (Oppdatert: Fjernet Therese G som ikke var i bildet)
     ["Patrick H", "Madelen", "Camilla A", "Rasmus", "Steffen", "Stig Owe", "Tonje", "Josefine"],
     
-    // Bord 8
+    // Bord 8 (Uendret)
     ["Adam", "Per", "Katrine H", "Lotte", "Tina", "Marielle", "Line", "Silje O", "Ørjan"],
     
-    // Bord 9
-    ["Therese H", "Therese D", "Christer J", "Tore Bjørn", "Terje L", "Ingrid Lene", "Ann Kristin", "Aslaug"]
+    // Bord 9 (Oppdatert: Therese H og D flyttet hit, Lars og Mentor flyttet ut)
+    ["Therese H", "Therese D", "Christer J", "Dalida", "Tore Bjørn", "Terje L", "Ingrid Lene", "Ann Kristin", "Aslaug"]
 ];
-
-        // Process Data
-        let totalAllergies = 0;
-        const tables = tablesData.map((names, i) => {
-            const guests = names.map(name => {
-                const allergy = allergyMap[name.toLowerCase()] || null;
-                if(allergy) totalAllergies++;
-                return { name, allergy };
-            });
-            // Fill to 10 seats for seat numbering consistency if needed, 
-            // but for list view we only show actual guests or explicit empties.
-            // Let's just keep actual guests for cleaner list.
-            return { id: i + 1, guests };
+        // Bygg data-struktur
+        const tables = [];
+        tablesData.forEach((guestNames, index) => {
+            const tableId = index + 1;
+            const capacity = 9; 
+            let guests = [...guestNames];
+            while(guests.length < capacity) { guests.push(null); }
+            tables.push({ id: tableId, name: "Bord " + tableId, guests: guests, capacity: capacity });
         });
 
         // --- RENDER ---
         const app = document.getElementById('app');
-        const statsEl = document.getElementById('totalStats');
 
         function render() {
-            statsEl.innerText = `${tablesData.flat().length} gjester • ${totalAllergies} med avvik`;
-            
             app.innerHTML = '';
-            
             tables.forEach(table => {
-                const allergyCount = table.guests.filter(g => g.allergy).length;
-                
                 const card = document.createElement('div');
                 card.className = 'card';
-                if(allergyCount > 0) card.classList.add('has-allergy-content');
-                card.dataset.tableId = table.id;
+                card.id = `card-${table.id}`;
 
-                const alertBadge = allergyCount > 0 
-                    ? `<span class="alert-badge" style="display:inline-block">⚠️ ${allergyCount}</span>` 
-                    : '';
-
-                let html = `
+                const filledSeats = table.guests.filter(g => g !== null).length;
+                card.innerHTML = `
                     <div class="card-header">
-                        <div class="table-title">Bord ${table.id}</div>
-                        <div class="table-meta">${alertBadge}</div>
+                        <div class="card-title">${table.name}</div>
+                        <div class="card-meta">${filledSeats} gjester</div>
                     </div>
-                    <div class="seat-list">
                 `;
+
+                // Visuell sirkel
+                const visualArea = document.createElement('div');
+                visualArea.className = 'visual-area';
+                const tableCircle = document.createElement('div');
+                tableCircle.className = 'table-circle';
+                tableCircle.innerText = table.id;
 
                 table.guests.forEach((guest, index) => {
                     const seatNum = index + 1;
-                    const isAllergic = !!guest.allergy;
-                    const allergyClass = isAllergic ? 'has-allergy' : '';
+                    const angle = (index * (360 / table.capacity)) - 90;
+                    const angleRad = angle * (Math.PI / 180);
+                    const distance = 110;
+
+                    const dot = document.createElement('div');
+                    dot.className = 'seat-dot';
+                    if(!guest) dot.classList.add('empty'); 
+                    dot.innerText = seatNum;
+                    dot.dataset.seatIndex = index; 
                     
-                    // Highlight logic for styling
-                    const numStyle = isAllergic ? 'background:var(--alert); color:white; border:none;' : '';
-
-                    html += `
-                        <div class="seat-item ${allergyClass}" data-search="${guest.name.toLowerCase()} ${guest.allergy ? guest.allergy.toLowerCase() : ''}">
-                            <div class="seat-num" style="${numStyle}">${seatNum}</div>
-                            <div class="seat-content">
-                                <span class="seat-name">${guest.name}</span>
-                                ${guest.allergy ? `<div class="allergy-tag">⚠️ ${guest.allergy}</div>` : ''}
-                            </div>
-                        </div>
-                    `;
+                    const x = Math.cos(angleRad) * distance;
+                    const y = Math.sin(angleRad) * distance;
+                    dot.style.transform = `translate(${x}px, ${y}px)`;
+                    tableCircle.appendChild(dot);
                 });
+                visualArea.appendChild(tableCircle);
+                card.appendChild(visualArea);
 
-                html += `</div>`;
-                card.innerHTML = html;
+                // Liste
+                const listArea = document.createElement('div');
+                listArea.className = 'guest-list';
+                table.guests.forEach((guest, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'guest-item';
+                    item.dataset.seatIndex = index;
+                    
+                    if (guest) {
+                        item.dataset.name = guest.toLowerCase();
+                        item.innerHTML = `<div class="guest-number">${index + 1}</div><div class="guest-name">${guest}</div>`;
+                    } else {
+                        item.classList.add('empty-seat');
+                        item.innerHTML = ``;
+                    }
+                    // Klikk for å markere manuelt
+                    item.addEventListener('click', () => {
+                        if(!guest) return;
+                        card.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
+                        item.classList.add('highlight');
+                        const dot = tableCircle.querySelector(`.seat-dot[data-seat-index="${index}"]`);
+                        if(dot) dot.classList.add('highlight');
+                    });
+                    listArea.appendChild(item);
+                });
+                card.appendChild(listArea);
                 app.appendChild(card);
             });
         }
 
-        // --- LOGIC ---
-        
-        // Mode Toggle
-        let currentMode = 'all';
-        function toggleMode() {
-            currentMode = currentMode === 'all' ? 'allergy' : 'all';
-            document.body.setAttribute('data-mode', currentMode);
-        }
-
-        // Search
+        // --- FORBEDRET SØK & SCROLL ---
         const searchInput = document.getElementById('searchInput');
+        let scrollTimeout; 
+
         searchInput.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
+            const term = e.target.value.toLowerCase().trim();
             const cards = document.querySelectorAll('.card');
-            
-            // If searching, enforce "all" mode temporarily or just filter visible items
-            // Let's stick to highlighting matches
-            
-            document.querySelectorAll('.seat-item').forEach(item => {
-                const text = item.dataset.search;
-                if(term === "") {
-                    item.classList.remove('highlight');
-                    item.style.display = ""; // Reset inline styles
-                } else {
-                    if(text.includes(term)) {
-                        item.classList.add('highlight');
-                        // Ensure it's visible even in allergy mode if it matches search? 
-                        // UX choice: Keep mode logic strict, search highlights what's visible.
-                    } else {
-                        item.classList.remove('highlight');
+            const allItems = document.querySelectorAll('.guest-item');
+            const allDots = document.querySelectorAll('.seat-dot');
+
+            // 1. Reset alt umiddelbart
+            allItems.forEach(el => el.classList.remove('highlight'));
+            allDots.forEach(el => el.classList.remove('highlight'));
+            cards.forEach(c => {
+                c.classList.remove('dimmed');
+                delete c.dataset.hasMatch;
+            });
+
+            // Avbryt eventuell ventende scroll hvis brukeren skriver mer
+            clearTimeout(scrollTimeout);
+
+            if (term.length === 0) return;
+
+            // 2. Finn og marker treff umiddelbart
+            let firstMatchElement = null;
+            let globalMatchFound = false;
+
+            allItems.forEach(item => {
+                const name = item.dataset.name;
+                if (name && name.includes(term)) {
+                    globalMatchFound = true;
+                    item.classList.add('highlight');
+                    
+                    const card = item.closest('.card');
+                    const index = item.dataset.seatIndex;
+                    const dot = card.querySelector(`.seat-dot[data-seat-index="${index}"]`);
+                    if(dot) dot.classList.add('highlight');
+                    card.dataset.hasMatch = "true";
+
+                    if (!firstMatchElement) {
+                        firstMatchElement = item;
                     }
                 }
             });
 
-            // Scroll to first match
-            if(term.length > 2) {
-                const match = document.querySelector('.highlight');
-                if(match) {
-                    match.scrollIntoView({behavior: "smooth", block: "center"});
-                }
+            // 3. Dimming
+            if (globalMatchFound) {
+                cards.forEach(card => {
+                    if (card.dataset.hasMatch !== "true") card.classList.add('dimmed');
+                });
+
+                // 4. FORSINKET SCROLL (Debounce)
+                scrollTimeout = setTimeout(() => {
+                    if (firstMatchElement) {
+                        const card = firstMatchElement.closest('.card');
+                        // ENDRET HER: block: 'start' sørger for at den viser toppen av kortet
+                        // CSS scroll-margin-top sørger for at den ikke havner under headeren
+                        card.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }
+                }, 500); 
             }
         });
 
-        // Init
+        // Start
         render();
-
     </script>
 </body>
 </html>
